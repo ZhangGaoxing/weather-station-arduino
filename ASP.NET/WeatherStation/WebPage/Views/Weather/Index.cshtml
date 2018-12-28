@@ -1,0 +1,182 @@
+﻿@model List<Weather>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<script src="https://cdn.bootcss.com/echarts/4.1.0-release/echarts.min.js"></script>
+
+
+<div id="temp" style="width: 700px;height:400px;float:left"></div>
+<div id="humi" style="width: 700px;height:400px;float:left"></div>
+<div id="press" style="width: 700px;height:400px;float:left"></div>
+<div id="dust" style="width: 700px;height:400px;float:left"></div>
+<div id="uv" style="width: 700px;height:400px;float:left"></div>
+
+<script type="text/javascript">
+    var temp = echarts.init(document.getElementById('temp'));
+    var tempOpt = {
+        title: {
+            text: 'Temperature'
+        },
+        tooltip: {},
+        legend: {
+            data: ['Temperature']
+        },
+        xAxis: {
+            name: 'Time',
+            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+        },
+        yAxis: {
+            name: 'Temperature(℃)'
+        },
+        series: [{
+            name: 'Temp(℃)',
+            type: 'line',
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    color: '#c23531',  //圈圈的颜色
+                    lineStyle: {
+                        color: '#c23531'  //线的颜色
+                    }
+                }
+            }, 
+            data: [@Model[0].Temperature, @Model[1].Temperature, @Model[2].Temperature, @Model[3].Temperature, @Model[4].Temperature, @Model[5].Temperature]
+        }]
+    };
+    temp.setOption(tempOpt);
+
+    var humi = echarts.init(document.getElementById('humi'));
+    var humiOpt = {
+        title: {
+            text: 'Humidity'
+        },
+        tooltip: {},
+        legend: {
+            data: ['Humidity']
+        },
+        xAxis: {
+            name: 'Time',
+            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+        },
+        yAxis: {
+            name: 'Humidity(%)'
+        },
+        series: [{
+            name: 'Humi(%)',
+            type: 'line',
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    color: '#2f4554', 
+                    lineStyle: {
+                        color: '#2f4554' 
+                    }
+                }
+            }, 
+            data: [@Model[0].Humidity, @Model[1].Humidity, @Model[2].Humidity, @Model[3].Humidity, @Model[4].Humidity, @Model[5].Humidity]
+        }]
+    };
+    humi.setOption(humiOpt);
+
+    var press = echarts.init(document.getElementById('press'));
+    var pressOpt = {
+        title: {
+            text: 'Pressure'
+        },
+        tooltip: {},
+        legend: {
+            data: ['Pressure']
+        },
+        xAxis: {
+            name: 'Time',
+            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+        },
+        yAxis: {
+            name: 'Pressure(Pa)',
+            min: 'dataMin'
+        },
+        series: [{
+            name: 'Press(Pa)',
+            type: 'line',
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    color: '#61a0a8', 
+                    lineStyle: {
+                        color: '#61a0a8'
+                    }
+                }
+            }, 
+            data: [@Model[0].Pressure, @Model[1].Pressure, @Model[2].Pressure, @Model[3].Pressure, @Model[4].Pressure, @Model[5].Pressure]
+        }]
+    };
+    press.setOption(pressOpt);
+
+    var dust = echarts.init(document.getElementById('dust'));
+    var dustOpt = {
+        title: {
+            text: 'Dust'
+        },
+        tooltip: {},
+        legend: {
+            data: ['Dust']
+        },
+        xAxis: {
+            name: 'Time',
+            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+        },
+        yAxis: {
+            name: 'Dust(mg/m³)'
+        },
+        series: [{
+            name: 'Dust(mg/m³)',
+            type: 'line',
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    color: '#d48265', 
+                    lineStyle: {
+                        color: '#d48265' 
+                    }
+                }
+            }, 
+            data: [@Model[0].Dust, @Model[1].Dust, @Model[2].Dust, @Model[3].Dust, @Model[4].Dust, @Model[5].Dust]
+        }]
+    };
+    dust.setOption(dustOpt);
+
+    var uv = echarts.init(document.getElementById('uv'));
+    var uvOpt = {
+        title: {
+            text: 'UV'
+        },
+        tooltip: {},
+        legend: {
+            data: ['UV']
+        },
+        xAxis: {
+            name: 'Time',
+            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+        },
+        yAxis: {
+            name: 'UV(mW/cm²)'
+        },
+        series: [{
+            name: 'UV(mW/cm²)',
+            type: 'line',
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    color: '#91c7ae', 
+                    lineStyle: {
+                        color: '#91c7ae' 
+                    }
+                }
+            }, 
+            data: [@Model[0].UV, @Model[1].UV, @Model[2].UV, @Model[3].UV, @Model[4].UV, @Model[5].UV]
+        }]
+    };
+    uv.setOption(uvOpt);
+</script>
