@@ -23,22 +23,34 @@ namespace API.Controllers
         [HttpGet]
         public Weather Get(int id = 1)
         {
-            return _context.Weathers.Where(x => x.ID == id).First();
+            try
+            {
+                return _context.Weathers.Where(x => x.ID == id).First();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         [HttpPost]
-        public async Task<bool> Post(Weather weather)
+        public async Task<string> Post(string token, Weather weather)
         {
+            if (token != "xxxxx")
+            {
+                return "Token error.";
+            }
+
             try
             {
                 _context.Weathers.Add(weather);
                 await _context.SaveChangesAsync();
 
-                return true;
+                return "True";
             }
             catch (Exception)
             {
-                return false;
+                return "False";
             }
         }
     }
