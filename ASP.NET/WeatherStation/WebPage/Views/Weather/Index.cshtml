@@ -119,7 +119,9 @@
         },
         yAxis: {
             name: 'Pressure(Pa)',
-            min: 'dataMin'
+            min: function(value) {
+                return value.min - 100;
+            }
         },
         series: [{
             name: 'Press(Pa)',
