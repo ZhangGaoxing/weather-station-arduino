@@ -6,12 +6,36 @@
 
 <script src="https://cdn.bootcss.com/echarts/4.1.0-release/echarts.min.js"></script>
 
+<div style="margin: 25px">
+    <div>
+        <h1>简介</h1>
+        <div>
+            <p>该项目包含一个基于 Arduino 的气象数据收集装置、一个 ASP.NET Core MVC 数据展示页以及一个 ASP.NET Core WebAPI 。收集的数据使用 ESP8266 发送，通过 WebAPI 写入SQL Server 数据库。气象数据收集装置由以下几个部分组成：</p>
+            <ul>
+                <li>AM2320 - 温湿度传感器</li>
+                <li>BMP280 - 气压传感器</li>
+                <li>ML8511 - 紫外线传感器</li>
+                <li>GP2Y1010AU0F - 灰尘传感器</li>
+                <li>DS3231 - 时钟</li>
+                <li>ESP8266 - WIFI</li>
+                <li>SD 卡模块</li>
+            </ul>
+            <p>气象数据收集装置部署位置大约在北纬 34°，东经117°，背阴，距离地表约 15m 。</p>
+            <p>收集的数据不保证精确性，不作气象预报用途，仅用于满足个人爱好。</p>
+        </div>
+    </div>
 
-<div id="temp" style="width: 700px;height:400px;float:left"></div>
-<div id="humi" style="width: 700px;height:400px;float:left"></div>
-<div id="press" style="width: 700px;height:400px;float:left"></div>
-<div id="dust" style="width: 700px;height:400px;float:left"></div>
-<div id="uv" style="width: 700px;height:400px;float:left"></div>
+    <div>
+        <h1>6 Hour Data</h1>
+        <div>
+            <div id="temp" style="width: 700px;height:400px;float:left"></div>
+            <div id="humi" style="width: 700px;height:400px;float:left"></div>
+            <div id="press" style="width: 700px;height:400px;float:left"></div>
+            <div id="dust" style="width: 700px;height:400px;float:left"></div>
+            <div id="uv" style="width: 700px;height:400px;float:left"></div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     var temp = echarts.init(document.getElementById('temp'));
