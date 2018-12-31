@@ -25,9 +25,8 @@
  * GND - GND
  * SDA - A4
  * SCL - A5
- * 
  **************************/
-
+ 
 #include <DS3231.h>
 #include <Adafruit_BMP280.h>
 #include <AM2320.h>
@@ -72,9 +71,10 @@ void setup() {
   if (SD.begin(chipSelect))
   {
     Serial.println("SD initialize done.");
-    if (!SD.exists("datalog.txt")) {
+    if (!SD.exists("datalog.txt"))
+    {
       File dataFile = SD.open("datalog.txt", FILE_WRITE);
-      dataFile.println("Time,Temperature(℃),Humidity(%),Pressure(Pa),UV(mW/cm^2),Dust(mg/m3)");
+      dataFile.println("Time,Temperature(℃),Humidity(%),Pressure(Pa),UV(mW/cm2),Dust(mg/m3)");
       dataFile.close();
     }
     WriteSD();
@@ -82,12 +82,18 @@ void setup() {
 }
 
 void loop() {
-  now=millis();
+  /*now=millis();
   minus=abs(now-last);
-  if(minus>INTERVAL){
+  if(minus>INTERVAL)
+  {
     last=now;
     WriteSD();
-  }
+  }*/
+
+  int minute=Clock.getMinute();
+  if(minute % 10 == 0)
+    WriteSD();
+  delay(60000);
 }
 
 void WriteSD(){
