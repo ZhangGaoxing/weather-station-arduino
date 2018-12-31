@@ -66,6 +66,9 @@ namespace WebPage.Controllers
             data.Reverse();
             #endregion
 
+            // Add Latest Data
+            data.Add(_context.Weathers.OrderByDescending(x => x.DateTime).First());
+
             return View(data);
         }
     }

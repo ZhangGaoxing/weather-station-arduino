@@ -4,6 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
+<style type="text/css">
+    table {
+        border-collapse: collapse;
+    }
+
+    table, td {
+        border: 1px solid black;
+    }
+
+    td {
+        padding: 5px;
+    }
+</style>
+
 <script src="https://cdn.bootcss.com/echarts/4.1.0-release/echarts.min.js"></script>
 
 <div style="margin: 25px">
@@ -23,6 +37,38 @@
             <p>气象数据收集装置部署位置大约在北纬 34°，东经117°，背阴，距离地表约 15m 。</p>
             <p>收集的数据不保证精确性，不作气象预报用途，仅用于满足个人爱好。</p>
         </div>
+    </div>
+
+    <div>
+        <h1>Latest Data</h1>
+        <table>
+            <tbody>
+                <tr>
+                    <td><b>Time</b></td>
+                    <td>@Model[6].DateTime.ToString("yyyy/MM/dd HH:mm")</td>
+                </tr>
+                <tr>
+                    <td><b>Temperature</b></td>
+                    <td>@Model[6].Temperature ℃</td>
+                </tr>
+                <tr>
+                    <td><b>Humidity</b></td>
+                    <td>@Model[6].Humidity %</td>
+                </tr>
+                <tr>
+                    <td><b>Pressure</b></td>
+                    <td>@Model[6].Pressure Pa</td>
+                </tr>
+                <tr>
+                    <td><b>Dust</b></td>
+                    <td>@Model[6].Dust mg/m³</td>
+                </tr>
+                <tr>
+                    <td><b>UV</b></td>
+                    <td>@Model[6].UV mW/cm²</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div>
