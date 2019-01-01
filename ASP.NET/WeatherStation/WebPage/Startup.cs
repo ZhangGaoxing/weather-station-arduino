@@ -33,8 +33,9 @@ namespace WebPage
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Connection String
             services.AddDbContext<WeatherContext>(opt =>
-                opt.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=WeatherStation;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
+                opt.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Initial Catalog=WeatherStation;User ID=YOUR USER ID;Password=YOUR PASSWORD"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

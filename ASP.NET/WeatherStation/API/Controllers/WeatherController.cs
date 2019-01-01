@@ -34,7 +34,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Post(string token, Weather weather)
+        public async Task<string> Post([FromQuery]string token, [FromQuery]Weather weather)
         {
             if (token != "xxxxx")
             {
