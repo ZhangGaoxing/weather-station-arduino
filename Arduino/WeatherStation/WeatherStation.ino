@@ -26,7 +26,8 @@
  * SDA - A4
  * SCL - A5
  **************************/
- 
+
+#include <SoftwareSerial.h>
 #include <DS3231.h>
 #include <Adafruit_BMP280.h>
 #include <AM2320.h>
@@ -45,18 +46,29 @@ const int UV_3V3 = A1;
 const int DUST_SAMPLING_TIME = 280; 
 const int DUST_DELTA_TIME = 40; 
 const int DUST_SLEEP_TIME = 9680; 
-const int DUST_LED_PIN=4;
-const int DUST_OUT_PIN=A2;
+const int DUST_LED_PIN = 4;
+const int DUST_OUT_PIN = A2;
 
-const unsigned long INTERVAL=600000;//120000;
+SoftwareSerial esp(9, 8); // RX, TX
+const int CH_PD_PIN = 7;
+const String ssid ="MERCURY_ZHANG";
+const String pwd ="85859095";
+const String host="weatherstationapi.zhangyue.xin";
+const String path="/api/Weather?";
+const String token="xxxxx";
+
+/*const unsigned long INTERVAL=600000;//120000;
 unsigned long last=0;
 unsigned long now=0;
-unsigned long minus=0;
+unsigned long minus=0;*/
 
 void setup() {
   Serial.begin(9600);
   Wire.begin();
- 
+
+ //ESP8266 Initialize
+ // EspInit();
+  
   //BMP280 Initialize
   bmp.begin();
   
@@ -77,7 +89,7 @@ void setup() {
       dataFile.println("Time,Temperature(℃),Humidity(%),Pressure(Pa),UV(mW/cm2),Dust(mg/m3)");
       dataFile.close();
     }
-    WriteSD();
+    WriteSdAndPost();
   }
 }
 
@@ -90,35 +102,85 @@ void loop() {
     WriteSD();
   }*/
 
-  int minute=Clock.getMinute();
+  /*int minute=Clock.getMinute();
   if(minute % 10 == 0)
-    WriteSD();
-  delay(60000);
+    WriteSdAndPost();
+  delay(60000);*/
+
+  WriteSdAndPost();
+  delay(5000);
 }
 
-void WriteSD(){
+void Post(String data){
+  esp.println("AT+CIPSTART=\"TCP\",\"weatherstationapi.zhangyue.xin\",80");
+  delay(1000);
+  esp.println("AT+CIPSEND");
+  delay(10);
+
+  esp.print("POST "+path+data+" HTTP/1.1\r\n");
+  esp.print("Host: "+host+"\r\n");
+  esp.print("Content-Length: 0\r\n");
+  esp.print("\r\n");
+  delay(200);
+
+  esp.print("+++");  
+  esp.println("AT+CIPCLOSE");
+  delay(10);
+}
+
+void WriteSdAndPost(){
   File dataFile = SD.open("datalog.txt", FILE_WRITE);
-  dataFile.print(ReadTime());
+  String dateStr=ReadTime();
+  Serial.println(dateStr);
+  dataFile.print(dateStr);
   dataFile.print(",");
-  
+
   th.Read();
   dataFile.print(th.t);
   dataFile.print(",");
   dataFile.print(th.h);
   dataFile.print(",");
-  
-  dataFile.print(bmp.readPressure());
+
+  float p=bmp.readPressure();
+  dataFile.print(p);
   dataFile.print(",");
-  
+
+  float uv=ReadUV();
+  dataFile.print(uv);
+  dataFile.print(",");
+
+  float dust=ReadDust();
+  dataFile.println(dust);
+  dataFile.close();
+
+  /*String data="Token="+token+"&Temperature="+th.t+"&Humidity="+th.h+"&Pressure="+p+"&UV="+uv+"&Dust"+dust;
+  Post(data);
+  Serial.println(data);*/
+}
+
+void EspInit(){
+  pinMode(CH_PD_PIN,OUTPUT);
+  digitalWrite(CH_PD_PIN,HIGH);
+  delay(100);
+  esp.begin(9600);
+  esp.println("AT+RST");
+  delay(1000);
+  String connect=(String)"AT+CWJAP=\""+ssid+"\",\""+pwd+"\"";
+  esp.println(connect);
+  delay(1000);
+  esp.write("AT+CIPMUX=0");
+  delay(10);
+  esp.println("AT+CIPMODE=1");
+  delay(10);
+}
+
+float ReadUV(){
   int uvLevel = averageAnalogRead(UV_OUT);
   int refLevel = averageAnalogRead(UV_3V3);
   float outputVoltage = 3.3 / refLevel * uvLevel;
   float uvIntensity = mapfloat(outputVoltage, 0.99, 2.9, 0.0, 15.0);
-  dataFile.print(uvIntensity);
-  dataFile.print(",");
-  
-  dataFile.println(ReadDust());
-  dataFile.close();
+
+  return uvIntensity;
 }
 
 float ReadDust(){
@@ -156,7 +218,7 @@ float ReadDust(){
 } 
 
 String ReadTime(){
-  String time="";
+  String dateTimeStr="";
   bool h12,PM,Century;
   int second=0,minute=0,hour=0,date=0,month=0,year=0; 
   String secondStr="",minuteStr="",hourStr="",dateStr="",monthStr="";
@@ -188,10 +250,10 @@ String ReadTime(){
     monthStr=monthStr+"0"+month;
   else
     monthStr+=month;
-    
-  time=time+"20"+year+"/"+monthStr+"/"+dateStr+" "+hourStr+":"+minuteStr+":"+secondStr;
 
-  return time;
+  dateTimeStr=dateTimeStr+"20"+year+"/"+monthStr+"/"+dateStr+" "+hourStr+":"+minuteStr+":"+secondStr;
+
+  return dateTimeStr;
 }
 
 int averageAnalogRead(int pinToRead)
