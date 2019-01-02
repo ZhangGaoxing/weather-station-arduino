@@ -15,9 +15,9 @@ UV Sensor
 Dust Sensor
   Sharp pin 1 (V-LED) - 5V (串联150Ω电阻，pin 1和电阻之间连220μF电容接地)
   Sharp pin 2 (LED-GND) - GND
-  Sharp pin 3 (LED) - pin 2
+  Sharp pin 3 (LED) - pin 4
   Sharp pin 4 (S-GND) - GND
-  Sharp pin 5 (Vo) - A0
+  Sharp pin 5 (Vo) - A2
   Sharp pin 6 (Vcc) - 5V
 
 ESP8266
