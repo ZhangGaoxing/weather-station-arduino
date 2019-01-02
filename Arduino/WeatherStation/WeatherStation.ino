@@ -60,8 +60,6 @@ SoftwareSerial esp(3, 2);
 const int CH_PD_PIN = 5;
 
 void setup() {
-  Serial.begin(9600);
-
   //BMP280 Initialize
   bmp.begin();
 
@@ -131,6 +129,19 @@ void WriteSdAndPost() {
 }
 
 void Post(String data1, String data2, String data3) {
+  // 连接至 WIFI
+  // Connect to WIFI
+  esp.println(F("AT+CWJAP=\"YOUR WIFI NAME\",\"YOUR WIFI PASSWORD\""));        // 替换你的 WIFI 名称和密码 - Replace your WIFI name and password
+  delay(5000);
+
+  // 连接至服务器
+  // Connect to servers
+  esp.println(F("AT+CIPSTART=\"TCP\",\"YOUR SERVER ADDRESS\",PORT"));        // 替换你的服务器地址和端口 - Replace your server address and port
+  delay(2000);
+  
+  esp.println(F("AT+CIPMODE=1"));
+  delay(200);
+  
   esp.println(F("AT+CIPSEND"));       // 开始传输 - begin
   delay(200);
 
@@ -148,6 +159,12 @@ void Post(String data1, String data2, String data3) {
 
   esp.print(F("+++"));        // 结束传输 - exit
   delay(1000);
+
+  esp.println(F("AT+CIPMODE=0"));
+  delay(200);
+  
+  esp.println(F("AT+CIPCLOSE"));
+  delay(200);
 }
 
 void EspInit() {
@@ -160,28 +177,15 @@ void EspInit() {
   // 初始化软串口
   // SoftwareSerial init
   esp.begin(9600);
-  delay(100);
+  delay(200);
 
   // 重启 ESP8266
   // Reboot ESP8266
   esp.println(F("AT+RST"));
   delay(5000);
 
-  // 连接至 WIFI
-  // Connect to WIFI
-  esp.println(F("AT+CWJAP=\"YOUR WIFI NAME\",\"YOUR WIFI PASSWORD\""));        // 替换你的 WIFI 名称和密码 - Replace your WIFI name and password
-  delay(5000);
-
   esp.println(F("AT+CIPMUX=0"));
-  delay(10);
-  
-  // 连接至服务器
-  // Connect to servers
-  esp.println(F("AT+CIPSTART=\"TCP\",\"YOUR SERVER ADDRESS\",PORT"));        // 替换你的服务器地址和端口 - Replace your server address and port
-  delay(2000);
-  
-  esp.println(F("AT+CIPMODE=1"));
-  delay(100);
+  delay(200);
 }
 
 float ReadUV() {
