@@ -1,7 +1,10 @@
-﻿@model List<Weather>
+﻿@inject IHtmlLocalizer<SharedLocalizer> Localizer
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+@model List<Weather>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = Localizer["Home"];
 }
 
 <style type="text/css">
@@ -16,55 +19,84 @@
     td {
         padding: 5px;
     }
+
+    h1 {
+        display: inline-block;
+    }
+
+    small {
+        color: #888888;
+        display: inline-block;
+        margin-left: 10px;
+
+    }
 </style>
 
 <script src="https://cdn.bootcss.com/echarts/4.1.0-release/echarts.min.js"></script>
 
 <div style="margin: 25px">
     <div>
-        <h1>简介</h1>
+        @{
+            var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+            var cultureItems = LocOptions.Value.SupportedUICultures
+                .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName, Selected = LocOptions.Value.DefaultRequestCulture.UICulture.Name == c.Name })
+                .ToList();
+            var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+        }
+
         <div>
-            <p>该项目包含一个基于 Arduino 的气象数据收集装置、一个 ASP.NET Core MVC 数据展示页以及一个 ASP.NET Core WebAPI 。收集的数据使用 ESP8266 发送，通过 WebAPI 写入SQL Server 数据库。气象数据收集装置由以下几个部分组成：</p>
-            <ul>
-                <li>AM2320 - 温湿度传感器</li>
-                <li>BMP280 - 气压传感器</li>
-                <li>ML8511 - 紫外线传感器</li>
-                <li>GP2Y1010AU0F - 灰尘传感器</li>
-                <li>DS3231 - 时钟</li>
-                <li>ESP8266 - WIFI</li>
-                <li>SD 卡模块</li>
-            </ul>
-            <p>气象数据收集装置部署位置大约在北纬 34°，东经117°，背阴，距离地表约 15m 。</p>
-            <p>收集的数据不保证精确性，不作气象预报用途，仅用于满足个人爱好。</p>
+            <form asp-controller="Weather" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" role="form">
+                <select class="language-select" name="culture" onchange="this.form.submit();" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
+            </form>
         </div>
     </div>
 
     <div>
-        <h1>Latest Data</h1>
+        <h1>@Localizer["Introduction"]</h1>
+        <div>
+            <p>@Localizer["I1"]</p>
+            <ul>
+                <li>@Localizer["I21"]</li>
+                <li>@Localizer["I22"]</li>
+                <li>@Localizer["I23"]</li>
+                <li>@Localizer["I24"]</li>
+                <li>@Localizer["I25"]</li>
+                <li>@Localizer["I26"]</li>
+                <li>@Localizer["I27"]</li>
+            </ul>
+            <p>@Localizer["I3"]</p>
+            <p>@Localizer["I4"]</p>
+        </div>
+    </div>
+
+    <div>
+        <h1>@Localizer["LatestData"]</h1>
+        <small>@Localizer["LatestDataSmall"]</small>
+
         <table>
             <tbody>
                 <tr>
-                    <td><b>Time</b></td>
+                    <td><b>@Localizer["Time"]</b></td>
                     <td>@Model[6].DateTime.ToString("yyyy/MM/dd HH:mm")</td>
                 </tr>
                 <tr>
-                    <td><b>Temperature</b></td>
+                    <td><b>@Localizer["Temperature"]</b></td>
                     <td>@Model[6].Temperature ℃</td>
                 </tr>
                 <tr>
-                    <td><b>Humidity</b></td>
+                    <td><b>@Localizer["Humidity"]</b></td>
                     <td>@Model[6].Humidity %</td>
                 </tr>
                 <tr>
-                    <td><b>Pressure</b></td>
+                    <td><b>@Localizer["Pressure"]</b></td>
                     <td>@Model[6].Pressure Pa</td>
                 </tr>
                 <tr>
-                    <td><b>Dust</b></td>
+                    <td><b>@Localizer["Dust"]</b></td>
                     <td>@Model[6].Dust mg/m³</td>
                 </tr>
                 <tr>
-                    <td><b>UV</b></td>
+                    <td><b>@Localizer["UV"]</b></td>
                     <td>@Model[6].UV mW/cm²</td>
                 </tr>
             </tbody>
@@ -72,7 +104,9 @@
     </div>
 
     <div>
-        <h1>6 Hour Data</h1>
+        <h1>@Localizer["6HourData"]</h1>
+        <small>@Localizer["6HourDataSmall"]</small>
+
         <div>
             <div id="temp" style="width: 700px;height:400px;float:left"></div>
             <div id="humi" style="width: 700px;height:400px;float:left"></div>
@@ -87,21 +121,21 @@
     var temp = echarts.init(document.getElementById('temp'));
     var tempOpt = {
         title: {
-            text: 'Temperature'
+            text: '@Localizer["Temperature"]'
         },
         tooltip: {},
         legend: {
-            data: ['Temperature']
+            data: ['@Localizer["Temperature"]']
         },
         xAxis: {
-            name: 'Time',
+            name: '@Localizer["Time"]',
             data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
-            name: 'Temperature(℃)'
+            name: '@Localizer["Temperature"] (℃)'
         },
         series: [{
-            name: 'Temp(℃)',
+            name: '@Localizer["Temp"] (℃)',
             type: 'line',
             smooth: true,
             itemStyle: {
@@ -111,7 +145,7 @@
                         color: '#c23531'  //线的颜色
                     }
                 }
-            }, 
+            },
             data: [@Model[0].Temperature, @Model[1].Temperature, @Model[2].Temperature, @Model[3].Temperature, @Model[4].Temperature, @Model[5].Temperature]
         }]
     };
@@ -120,31 +154,31 @@
     var humi = echarts.init(document.getElementById('humi'));
     var humiOpt = {
         title: {
-            text: 'Humidity'
+            text: '@Localizer["Humidity"]'
         },
         tooltip: {},
         legend: {
-            data: ['Humidity']
+            data: ['@Localizer["Humidity"]']
         },
         xAxis: {
-            name: 'Time',
+            name: '@Localizer["Time"]',
             data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
-            name: 'Humidity(%)'
+            name: '@Localizer["Humidity"] (%)'
         },
         series: [{
-            name: 'Humi(%)',
+            name: '@Localizer["Humidity"] (%)',
             type: 'line',
             smooth: true,
             itemStyle: {
                 normal: {
-                    color: '#2f4554', 
+                    color: '#2f4554',
                     lineStyle: {
-                        color: '#2f4554' 
+                        color: '#2f4554'
                     }
                 }
-            }, 
+            },
             data: [@Model[0].Humidity, @Model[1].Humidity, @Model[2].Humidity, @Model[3].Humidity, @Model[4].Humidity, @Model[5].Humidity]
         }]
     };
@@ -153,34 +187,34 @@
     var press = echarts.init(document.getElementById('press'));
     var pressOpt = {
         title: {
-            text: 'Pressure'
+            text: '@Localizer["Pressure"]'
         },
         tooltip: {},
         legend: {
-            data: ['Pressure']
+            data: ['@Localizer["Pressure"]']
         },
         xAxis: {
-            name: 'Time',
+            name: '@Localizer["Time"]',
             data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
-            name: 'Pressure(Pa)',
+            name: '@Localizer["Pressure"] (Pa)',
             min: function(value) {
                 return value.min - 100;
             }
         },
         series: [{
-            name: 'Press(Pa)',
+            name: '@Localizer["Pressure"] (Pa)',
             type: 'line',
             smooth: true,
             itemStyle: {
                 normal: {
-                    color: '#61a0a8', 
+                    color: '#61a0a8',
                     lineStyle: {
                         color: '#61a0a8'
                     }
                 }
-            }, 
+            },
             data: [@Model[0].Pressure, @Model[1].Pressure, @Model[2].Pressure, @Model[3].Pressure, @Model[4].Pressure, @Model[5].Pressure]
         }]
     };
@@ -189,31 +223,31 @@
     var dust = echarts.init(document.getElementById('dust'));
     var dustOpt = {
         title: {
-            text: 'Dust'
+            text: '@Localizer["Dust"]'
         },
         tooltip: {},
         legend: {
-            data: ['Dust']
+            data: ['@Localizer["Dust"]']
         },
         xAxis: {
-            name: 'Time',
+            name: '@Localizer["Time"]',
             data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
-            name: 'Dust(mg/m³)'
+            name: '@Localizer["Dust"] (mg/m³)'
         },
         series: [{
-            name: 'Dust(mg/m³)',
+            name: '@Localizer["Dust"] (mg/m³)',
             type: 'line',
             smooth: true,
             itemStyle: {
                 normal: {
-                    color: '#d48265', 
+                    color: '#d48265',
                     lineStyle: {
-                        color: '#d48265' 
+                        color: '#d48265'
                     }
                 }
-            }, 
+            },
             data: [@Model[0].Dust, @Model[1].Dust, @Model[2].Dust, @Model[3].Dust, @Model[4].Dust, @Model[5].Dust]
         }]
     };
@@ -222,31 +256,31 @@
     var uv = echarts.init(document.getElementById('uv'));
     var uvOpt = {
         title: {
-            text: 'UV'
+            text: '@Localizer["UV"]'
         },
         tooltip: {},
         legend: {
-            data: ['UV']
+            data: ['@Localizer["UV"]']
         },
         xAxis: {
-            name: 'Time',
+            name: '@Localizer["Time"]',
             data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
-            name: 'UV(mW/cm²)'
+            name: '@Localizer["UV"] (mW/cm²)'
         },
         series: [{
-            name: 'UV(mW/cm²)',
+            name: '@Localizer["UV"] (mW/cm²)',
             type: 'line',
             smooth: true,
             itemStyle: {
                 normal: {
-                    color: '#91c7ae', 
+                    color: '#91c7ae',
                     lineStyle: {
-                        color: '#91c7ae' 
+                        color: '#91c7ae'
                     }
                 }
-            }, 
+            },
             data: [@Model[0].UV, @Model[1].UV, @Model[2].UV, @Model[3].UV, @Model[4].UV, @Model[5].UV]
         }]
     };
