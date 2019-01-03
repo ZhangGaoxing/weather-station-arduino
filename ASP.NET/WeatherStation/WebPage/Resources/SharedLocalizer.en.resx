@@ -139,24 +139,33 @@
     <value>The project includes an Arduino-based weather station, an ASP.NET Core MVC data presentation page, and an ASP.NET Core WebAPI. The collected data is sent using ESP8266 and written to the SQL Server database via WebAPI. The weather station consists of the following parts:</value>
   </data>
   <data name="I21" xml:space="preserve">
-    <value>AM2320 - Digital Temperature and Humidity Sensor</value>
+    <value>Arduino Nano</value>
+  </data>
+  <data name="I210" xml:space="preserve">
+    <value>18650 Li-ion and Charger (Optional)</value>
   </data>
   <data name="I22" xml:space="preserve">
-    <value>BMP280 - Barometric Pressure and Altitude Sensor</value>
+    <value>Nano Shield</value>
   </data>
   <data name="I23" xml:space="preserve">
-    <value>ML8511 - UV sensor</value>
+    <value>AM2320 - Digital Temperature and Humidity Sensor</value>
   </data>
   <data name="I24" xml:space="preserve">
-    <value>GP2Y1010AU0F - Optical Dust Sensor</value>
+    <value>BMP280 - Barometric Pressure and Altitude Sensor</value>
   </data>
   <data name="I25" xml:space="preserve">
-    <value>DS3231 - RTC</value>
+    <value>ML8511 - UV sensor</value>
   </data>
   <data name="I26" xml:space="preserve">
-    <value>ESP8266 - WIFI</value>
+    <value>GP2Y1010F45 - Optical Dust Sensor</value>
   </data>
   <data name="I27" xml:space="preserve">
+    <value>DS3231 - RTC</value>
+  </data>
+  <data name="I28" xml:space="preserve">
+    <value>ESP8266 - WIFI</value>
+  </data>
+  <data name="I29" xml:space="preserve">
     <value>SD card module</value>
   </data>
   <data name="I3" xml:space="preserve">

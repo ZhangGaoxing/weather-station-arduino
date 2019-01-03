@@ -139,24 +139,33 @@
     <value>该项目包含一个基于 Arduino 的气象数据收集装置、一个 ASP.NET Core MVC 数据展示页以及一个 ASP.NET Core WebAPI 。收集的数据使用 ESP8266 发送，通过 WebAPI 写入SQL Server 数据库。气象数据收集装置由以下几个部分组成：</value>
   </data>
   <data name="I21" xml:space="preserve">
-    <value>AM2320 - 温湿度传感器</value>
+    <value>Arduino Nano</value>
+  </data>
+  <data name="I210" xml:space="preserve">
+    <value>18650 锂电池与充放电板（可选）</value>
   </data>
   <data name="I22" xml:space="preserve">
-    <value>BMP280 - 气压传感器</value>
+    <value>Nano Shield</value>
   </data>
   <data name="I23" xml:space="preserve">
-    <value>ML8511 - 紫外线传感器</value>
+    <value>AM2320 - 温湿度传感器</value>
   </data>
   <data name="I24" xml:space="preserve">
-    <value>GP2Y1010AU0F - 灰尘传感器</value>
+    <value>BMP280 - 气压传感器</value>
   </data>
   <data name="I25" xml:space="preserve">
-    <value>DS3231 - 时钟</value>
+    <value>ML8511 - 紫外线传感器</value>
   </data>
   <data name="I26" xml:space="preserve">
-    <value>ESP8266 - WIFI</value>
+    <value>GP2Y1010F45 - 灰尘传感器</value>
   </data>
   <data name="I27" xml:space="preserve">
+    <value>DS3231 - 时钟</value>
+  </data>
+  <data name="I28" xml:space="preserve">
+    <value>ESP8266 - WIFI</value>
+  </data>
+  <data name="I29" xml:space="preserve">
     <value>SD 卡模块</value>
   </data>
   <data name="I3" xml:space="preserve">
