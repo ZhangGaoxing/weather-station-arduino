@@ -122,15 +122,16 @@ Connect sensors to Arduino.
 5. Publish **API**, **WebPage** to your server
 
 ### In Arduino
-1. Open "**WeatherStation.ino**"
-2. In **Line 134**, replace your WIFI name and password
-3. In **Line 139**, replace your server address and port
-4. In **Line 150**, replace your Token
-5. In **Line 155**, replace your Host
+1. Copy libraries to **x:\Program Files (x86)\Arduino\libraries**
+2. Open "**WeatherStation.ino**"
+3. In **Line 134**, replace your WIFI name and password
+4. In **Line 139**, replace your server address and port
+5. In **Line 150**, replace your Token
+6. In **Line 155**, replace your Host
 
     ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/Arduino1.jpg)
 
-6. Upload program to your Arduino
+7. Upload program to your Arduino
 
 ## Demo Page
 [http://weatherstation.zhangyue.xin/](http://weatherstation.zhangyue.xin)
