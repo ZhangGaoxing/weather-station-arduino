@@ -184,6 +184,10 @@ void EspInit() {
   esp.println(F("AT+RST"));
   delay(5000);
 
+  // STA 模式
+  esp.println(F("AT+CWMODE=1"));
+  delay(2000);
+
   esp.println(F("AT+CIPMUX=0"));
   delay(200);
 }
