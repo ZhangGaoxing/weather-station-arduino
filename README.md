@@ -15,6 +15,8 @@ This project includes an Arduino-based weather station, an ASP.NET Core MVC data
 
 ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/flowchart.png)
 
+Most of the referenced libraries come from Adafruit and Aduino Playground, and some I don't know who written it. AM2320 comes from [thakshak](https://github.com/thakshak/AM2320).
+
 ## Components
 ||Name|Count|
 |---|:---|---:|
@@ -91,7 +93,7 @@ Connect sensors to Arduino.
 
     ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ASP3.jpg)
 
-4. Open Tools - NuGet Package Manager - Package Manager Console, change **Default project** to **Utility**
+4. Open Tools - NuGet Package Manager - **Package Manager Console**, change **Default project** to **Utility**
    
     ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ASP41.jpg)
     ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ASP42.jpg)
