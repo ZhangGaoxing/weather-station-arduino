@@ -204,7 +204,7 @@
         yAxis: {
             name: '@Localizer["Pressure"] (Pa)',
             min: function(value) {
-                return value.min - 100;
+                return parseInt(value.min) - 100;
             }
         },
         series: [{
