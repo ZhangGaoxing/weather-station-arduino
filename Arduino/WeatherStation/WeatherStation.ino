@@ -59,6 +59,8 @@ const int DUST_SLEEP_TIME = 9680;
 SoftwareSerial esp(3, 2);
 const int CH_PD_PIN = 5;
 
+bool Century=false;
+
 void setup() {
   //BMP280 Initialize
   bmp.begin();
@@ -76,12 +78,13 @@ void setup() {
   //SD Initialize
   if (SD.begin(SD_CS))
   {
-    if (!SD.exists("datalog.txt"))
+    /*if (!SD.exists("datalog.txt"))
     {
       File dataFile = SD.open("datalog.txt", FILE_WRITE);
       dataFile.println("Time,Temperature(℃),Humidity(%),Pressure(Pa),UV(mW/cm2),Dust(mg/m3)");
       dataFile.close();
-    }
+    }*/
+    
     WriteSdAndPost();
   }
 }
@@ -96,7 +99,9 @@ void loop() {
 }
 
 void WriteSdAndPost() {
-  File dataFile = SD.open("datalog.txt", FILE_WRITE);
+  String fileName=(String)"20"+Clock.getYear()+"_"+Clock.getMonth(Century)+"_"+Clock.getDate();
+
+  File dataFile = SD.open(fileName, FILE_WRITE);
   String datetime = ReadTime();
   dataFile.print(datetime);
   dataFile.print(",");
@@ -226,7 +231,7 @@ float ReadDust() {
 }
 
 String ReadTime() {
-  bool h12, PM, Century;
+  bool h12, PM;
   int second = 0, minute = 0, hour = 0, date = 0, month = 0, year = 0;
   //String secondStr="",minuteStr="",hourStr="",dateStr="",monthStr="";
 
