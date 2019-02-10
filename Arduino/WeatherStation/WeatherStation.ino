@@ -78,13 +78,6 @@ void setup() {
   //SD Initialize
   if (SD.begin(SD_CS))
   {
-    /*if (!SD.exists("datalog.txt"))
-    {
-      File dataFile = SD.open("datalog.txt", FILE_WRITE);
-      dataFile.println("Time,Temperature(℃),Humidity(%),Pressure(Pa),UV(mW/cm2),Dust(mg/m3)");
-      dataFile.close();
-    }*/
-    
     WriteSdAndPost();
   }
 }
@@ -99,7 +92,9 @@ void loop() {
 }
 
 void WriteSdAndPost() {
-  String fileName=(String)"20"+Clock.getYear()+"_"+Clock.getMonth(Century)+"_"+Clock.getDate();
+  // Time,Temperature(℃),Humidity(%),Pressure(Pa),UV(mW/cm2),Dust(mg/m3)
+  bool Century;
+  String fileName=(String)Clock.getYear()+"_"+Clock.getMonth(Century)+"_"+Clock.getDate()+".txt";
 
   File dataFile = SD.open(fileName, FILE_WRITE);
   String datetime = ReadTime();
