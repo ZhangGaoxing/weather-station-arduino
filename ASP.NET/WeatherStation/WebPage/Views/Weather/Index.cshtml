@@ -1,10 +1,13 @@
 ﻿@inject IHtmlLocalizer<SharedLocalizer> Localizer
 @inject IOptions<RequestLocalizationOptions> LocOptions
 
-@model List<Weather>
-
 @{
     ViewData["Title"] = Localizer["Home"];
+}
+
+@{ 
+    Weather latestData = (Weather)ViewData["LatestData"];
+    List<Weather> hoursData = (List<Weather>)ViewData["HoursData"];
 }
 
 <style type="text/css">
@@ -81,27 +84,27 @@
             <tbody>
                 <tr>
                     <td><b>@Localizer["Time"]</b></td>
-                    <td>@Model[6].DateTime.ToString("yyyy/MM/dd HH:mm")</td>
+                    <td>@latestData.DateTime.ToString("yyyy/MM/dd HH:mm")</td>
                 </tr>
                 <tr>
                     <td><b>@Localizer["Temperature"]</b></td>
-                    <td>@Model[6].Temperature ℃</td>
+                    <td>@latestData.Temperature ℃</td>
                 </tr>
                 <tr>
                     <td><b>@Localizer["Humidity"]</b></td>
-                    <td>@Model[6].Humidity %</td>
+                    <td>@latestData.Humidity %</td>
                 </tr>
                 <tr>
                     <td><b>@Localizer["Pressure"]</b></td>
-                    <td>@Model[6].Pressure Pa</td>
+                    <td>@latestData.Pressure Pa</td>
                 </tr>
                 <tr>
                     <td><b>@Localizer["Dust"]</b></td>
-                    <td>@Model[6].Dust mg/m³</td>
+                    <td>@latestData.Dust mg/m³</td>
                 </tr>
                 <tr>
                     <td><b>@Localizer["UV"]</b></td>
-                    <td>@Model[6].UV mW/cm²</td>
+                    <td>@latestData.UV mW/cm²</td>
                 </tr>
             </tbody>
         </table>
@@ -133,7 +136,7 @@
         },
         xAxis: {
             name: '@Localizer["Time"]',
-            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+            data: ["@hoursData[0].DateTime.ToString("MM/dd HH:mm")", "@hoursData[1].DateTime.ToString("MM/dd HH:mm")", "@hoursData[2].DateTime.ToString("MM/dd HH:mm")", "@hoursData[3].DateTime.ToString("MM/dd HH:mm")", "@hoursData[4].DateTime.ToString("MM/dd HH:mm")", "@hoursData[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
             name: '@Localizer["Temperature"] (℃)'
@@ -150,7 +153,7 @@
                     }
                 }
             },
-            data: [@Model[0].Temperature, @Model[1].Temperature, @Model[2].Temperature, @Model[3].Temperature, @Model[4].Temperature, @Model[5].Temperature]
+            data: [@hoursData[0].Temperature, @hoursData[1].Temperature, @hoursData[2].Temperature, @hoursData[3].Temperature, @hoursData[4].Temperature, @hoursData[5].Temperature]
         }]
     };
     temp.setOption(tempOpt);
@@ -166,7 +169,7 @@
         },
         xAxis: {
             name: '@Localizer["Time"]',
-            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+            data: ["@hoursData[0].DateTime.ToString("MM/dd HH:mm")", "@hoursData[1].DateTime.ToString("MM/dd HH:mm")", "@hoursData[2].DateTime.ToString("MM/dd HH:mm")", "@hoursData[3].DateTime.ToString("MM/dd HH:mm")", "@hoursData[4].DateTime.ToString("MM/dd HH:mm")", "@hoursData[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
             name: '@Localizer["Humidity"] (%)'
@@ -183,7 +186,7 @@
                     }
                 }
             },
-            data: [@Model[0].Humidity, @Model[1].Humidity, @Model[2].Humidity, @Model[3].Humidity, @Model[4].Humidity, @Model[5].Humidity]
+            data: [@hoursData[0].Humidity, @hoursData[1].Humidity, @hoursData[2].Humidity, @hoursData[3].Humidity, @hoursData[4].Humidity, @hoursData[5].Humidity]
         }]
     };
     humi.setOption(humiOpt);
@@ -199,7 +202,7 @@
         },
         xAxis: {
             name: '@Localizer["Time"]',
-            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+            data: ["@hoursData[0].DateTime.ToString("MM/dd HH:mm")", "@hoursData[1].DateTime.ToString("MM/dd HH:mm")", "@hoursData[2].DateTime.ToString("MM/dd HH:mm")", "@hoursData[3].DateTime.ToString("MM/dd HH:mm")", "@hoursData[4].DateTime.ToString("MM/dd HH:mm")", "@hoursData[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
             name: '@Localizer["Pressure"] (Pa)',
@@ -219,7 +222,7 @@
                     }
                 }
             },
-            data: [@Model[0].Pressure, @Model[1].Pressure, @Model[2].Pressure, @Model[3].Pressure, @Model[4].Pressure, @Model[5].Pressure]
+            data: [@hoursData[0].Pressure, @hoursData[1].Pressure, @hoursData[2].Pressure, @hoursData[3].Pressure, @hoursData[4].Pressure, @hoursData[5].Pressure]
         }]
     };
     press.setOption(pressOpt);
@@ -235,7 +238,7 @@
         },
         xAxis: {
             name: '@Localizer["Time"]',
-            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+            data: ["@hoursData[0].DateTime.ToString("MM/dd HH:mm")", "@hoursData[1].DateTime.ToString("MM/dd HH:mm")", "@hoursData[2].DateTime.ToString("MM/dd HH:mm")", "@hoursData[3].DateTime.ToString("MM/dd HH:mm")", "@hoursData[4].DateTime.ToString("MM/dd HH:mm")", "@hoursData[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
             name: '@Localizer["Dust"] (mg/m³)'
@@ -252,7 +255,7 @@
                     }
                 }
             },
-            data: [@Model[0].Dust, @Model[1].Dust, @Model[2].Dust, @Model[3].Dust, @Model[4].Dust, @Model[5].Dust]
+            data: [@hoursData[0].Dust, @hoursData[1].Dust, @hoursData[2].Dust, @hoursData[3].Dust, @hoursData[4].Dust, @hoursData[5].Dust]
         }]
     };
     dust.setOption(dustOpt);
@@ -268,7 +271,7 @@
         },
         xAxis: {
             name: '@Localizer["Time"]',
-            data: ["@Model[0].DateTime.ToString("MM/dd HH:mm")", "@Model[1].DateTime.ToString("MM/dd HH:mm")", "@Model[2].DateTime.ToString("MM/dd HH:mm")", "@Model[3].DateTime.ToString("MM/dd HH:mm")", "@Model[4].DateTime.ToString("MM/dd HH:mm")", "@Model[5].DateTime.ToString("MM/dd HH:mm")"]
+            data: ["@hoursData[0].DateTime.ToString("MM/dd HH:mm")", "@hoursData[1].DateTime.ToString("MM/dd HH:mm")", "@hoursData[2].DateTime.ToString("MM/dd HH:mm")", "@hoursData[3].DateTime.ToString("MM/dd HH:mm")", "@hoursData[4].DateTime.ToString("MM/dd HH:mm")", "@hoursData[5].DateTime.ToString("MM/dd HH:mm")"]
         },
         yAxis: {
             name: '@Localizer["UV"] (mW/cm²)'
@@ -285,7 +288,7 @@
                     }
                 }
             },
-            data: [@Model[0].UV, @Model[1].UV, @Model[2].UV, @Model[3].UV, @Model[4].UV, @Model[5].UV]
+            data: [@hoursData[0].UV, @hoursData[1].UV, @hoursData[2].UV, @hoursData[3].UV, @hoursData[4].UV, @hoursData[5].UV]
         }]
     };
     uv.setOption(uvOpt);

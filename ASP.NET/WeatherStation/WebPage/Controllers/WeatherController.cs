@@ -24,9 +24,13 @@ namespace WebPage.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            List<Weather> data = new List<Weather>();
+            // Add Latest Data
+            ViewData["LatestData"] = _context.Weathers.OrderByDescending(x => x.DateTime)
+                .First();
 
             #region Select 6 Hour Data
+            List<Weather> hoursData = new List<Weather>();
+
             var groups = _context.Weathers.GroupBy(x => x.DateTime.Date)
                 .OrderByDescending(x => x.Key)
                 .Take(2)
@@ -43,7 +47,7 @@ namespace WebPage.Controllers
 
                 foreach (var item in temp)
                 {
-                    data.Add(item[0]);
+                    hoursData.Add(item[0]);
                 }
             }
             else
@@ -56,22 +60,21 @@ namespace WebPage.Controllers
 
                 foreach (var item in today)
                 {
-                    data.Add(item[0]);
+                    hoursData.Add(item[0]);
                 }
 
                 foreach (var item in temp)
                 {
-                    data.Add(item[0]);
+                    hoursData.Add(item[0]);
                 }
             }
 
-            data.Reverse();
+            hoursData.Reverse();
+
+            ViewData["HoursData"] = hoursData;
             #endregion
 
-            // Add Latest Data
-            data.Add(_context.Weathers.OrderByDescending(x => x.DateTime).First());
-
-            return View(data);
+            return View();
         }
 
         [HttpPost]
