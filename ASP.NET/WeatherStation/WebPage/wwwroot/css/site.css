@@ -86,3 +86,9 @@ td {
     height: 400px;
     float: left
 }
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1500px;
+    }
+}
