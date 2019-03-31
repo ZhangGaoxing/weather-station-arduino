@@ -129,9 +129,6 @@
   <data name="Dust" xml:space="preserve">
     <value>可吸入颗粒物</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>气象数据收集装置</value>
-  </data>
   <data name="Humidity" xml:space="preserve">
     <value>相对湿度</value>
   </data>
@@ -144,17 +141,20 @@
   <data name="I210" xml:space="preserve">
     <value>18650 锂电池与充放电板（可选）</value>
   </data>
+  <data name="I211" xml:space="preserve">
+    <value>BME280 - 温度、湿度、气压传感器</value>
+  </data>
   <data name="I22" xml:space="preserve">
     <value>Nano Shield</value>
   </data>
   <data name="I23" xml:space="preserve">
-    <value>AM2320 - 温湿度传感器</value>
+    <value>AM2320 - 温度、湿度传感器</value>
   </data>
   <data name="I24" xml:space="preserve">
     <value>BMP280 - 气压传感器</value>
   </data>
   <data name="I25" xml:space="preserve">
-    <value>ML8511 - 紫外线传感器</value>
+    <value>ML8511 - 紫外线传感器（弃用）</value>
   </data>
   <data name="I26" xml:space="preserve">
     <value>GP2Y1010F45 - 灰尘传感器</value>
@@ -183,8 +183,14 @@
   <data name="LatestDataSmall" xml:space="preserve">
     <value>取数据库中的最新数据</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>或</value>
+  </data>
   <data name="Pressure" xml:space="preserve">
     <value>气压</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>气象数据收集装置</value>
   </data>
   <data name="Temperature" xml:space="preserve">
     <value>环境温度</value>
@@ -194,5 +200,11 @@
   </data>
   <data name="UV" xml:space="preserve">
     <value>紫外线指数</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>欢迎来到Arduino实现的气象数据收集装置</value>
+  </data>
+  <data name="WelcomeSmall" xml:space="preserve">
+    <value>了解该项目的详细实现步骤：</value>
   </data>
 </root>

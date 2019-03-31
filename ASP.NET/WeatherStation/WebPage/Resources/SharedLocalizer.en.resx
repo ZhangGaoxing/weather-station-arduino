@@ -129,9 +129,6 @@
   <data name="Dust" xml:space="preserve">
     <value>Respirable Particles</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Weather Station</value>
-  </data>
   <data name="Humidity" xml:space="preserve">
     <value>Relative Humidity</value>
   </data>
@@ -144,6 +141,9 @@
   <data name="I210" xml:space="preserve">
     <value>18650 Li-ion and Charger (Optional)</value>
   </data>
+  <data name="I211" xml:space="preserve">
+    <value>BME280 - Temperature, Humidity &amp; Pressure Sensor</value>
+  </data>
   <data name="I22" xml:space="preserve">
     <value>Nano Shield</value>
   </data>
@@ -154,7 +154,7 @@
     <value>BMP280 - Barometric Pressure and Altitude Sensor</value>
   </data>
   <data name="I25" xml:space="preserve">
-    <value>ML8511 - UV sensor</value>
+    <value>ML8511 - UV sensor (Abandon)</value>
   </data>
   <data name="I26" xml:space="preserve">
     <value>GP2Y1010F45 - Optical Dust Sensor</value>
@@ -183,8 +183,14 @@
   <data name="LatestDataSmall" xml:space="preserve">
     <value>Show the latest data in the database</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>or</value>
+  </data>
   <data name="Pressure" xml:space="preserve">
     <value>Pressure</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>Weather Station</value>
   </data>
   <data name="Temperature" xml:space="preserve">
     <value>Temperature</value>
@@ -194,5 +200,11 @@
   </data>
   <data name="UV" xml:space="preserve">
     <value>UV Index</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome to the Arduino Weather Station</value>
+  </data>
+  <data name="WelcomeSmall" xml:space="preserve">
+    <value>Learn about this project in </value>
   </data>
 </root>

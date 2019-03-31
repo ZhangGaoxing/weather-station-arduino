@@ -2,7 +2,7 @@
 @inject IOptions<RequestLocalizationOptions> LocOptions
 
 @{
-    ViewData["Title"] = Localizer["Home"];
+    ViewData["Title"] = Localizer["ProjectName"];
 }
 
 @{ 
@@ -10,60 +10,25 @@
     List<Weather> hoursData = (List<Weather>)ViewData["HoursData"];
 }
 
-<style type="text/css">
-    table {
-        border-collapse: collapse;
-    }
-
-    table, td {
-        border: 1px solid black;
-    }
-
-    td {
-        padding: 5px;
-    }
-
-    h1 {
-        display: inline-block;
-    }
-
-    small {
-        color: #888888;
-        display: inline-block;
-        margin-left: 10px;
-
-    }
-</style>
-
 <script src="https://cdn.bootcss.com/echarts/4.1.0-release/echarts.min.js"></script>
 
-<div style="margin: 25px">
-    <div>
-        @{
-            var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-            var cultureItems = LocOptions.Value.SupportedUICultures
-                .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName, Selected = LocOptions.Value.DefaultRequestCulture.UICulture.Name == c.Name })
-                .ToList();
-            var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
-        }
+<div class="text-center">
+    <h1 class="display-4">@Localizer["Welcome"]</h1>
+    <p>@Localizer["WelcomeSmall"]<a href="https://www.hackster.io/HappyZhang/arduino-asp-net-core-project-weather-station-62aed0">Hackster.io</a> @Localizer["Or"] <a href="https://github.com/ZhangGaoxing/weather-station-arduino">GitHub</a></p>
+</div>
 
-        <div>
-            <form asp-controller="Weather" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" role="form">
-                <select class="language-select" name="culture" onchange="this.form.submit();" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
-            </form>
-        </div>
-    </div>
-
+<div class="weather-content">
     <div>
-        <h1>@Localizer["Introduction"]</h1>
+        <h1 class="weather-h1">@Localizer["Introduction"]</h1>
         <div>
             <div>@Localizer["I1"]</div>
             <ul>
                 <li>@Localizer["I21"]</li>
                 <li>@Localizer["I22"]</li>
-                <li>@Localizer["I23"]</li>
-                <li>@Localizer["I24"]</li>
-                <li>@Localizer["I25"]</li>
+                <li>@Localizer["I211"]</li>
+                <li><s>@Localizer["I23"]</s></li>
+                <li><s>@Localizer["I24"]</s></li>
+                <li><s>@Localizer["I25"]</s></li>
                 <li>@Localizer["I26"]</li>
                 <li>@Localizer["I27"]</li>
                 <li>@Localizer["I28"]</li>
@@ -72,15 +37,14 @@
             </ul>
             <p>@Localizer["I3"]</p>
             <p>@Localizer["I4"]</p>
-            <p>GitHub: <a href="https://github.com/ZhangGaoxing/weather-station-arduino" target="_blank">https://github.com/ZhangGaoxing/weather-station-arduino</a></p>
         </div>
     </div>
 
     <div>
-        <h1>@Localizer["LatestData"]</h1>
-        <small>@Localizer["LatestDataSmall"]</small>
+        <h1 class="weather-h1">@Localizer["LatestData"]</h1>
+        <small class="weather-small">@Localizer["LatestDataSmall"]</small>
 
-        <table>
+        <table class="weather-table">
             <tbody>
                 <tr>
                     <td><b>@Localizer["Time"]</b></td>
@@ -102,24 +66,25 @@
                     <td><b>@Localizer["Dust"]</b></td>
                     <td>@latestData.Dust mg/m³</td>
                 </tr>
-                <tr>
+                @*<tr>
                     <td><b>@Localizer["UV"]</b></td>
                     <td>@latestData.UV mW/cm²</td>
-                </tr>
+                </tr>*@
             </tbody>
         </table>
     </div>
 
     <div>
-        <h1>@Localizer["6HourData"]</h1>
-        <small>@Localizer["6HourDataSmall"]</small>
+        <h1 class="weather-h1">@Localizer["6HourData"]</h1>
+        <small class="weather-small">@Localizer["6HourDataSmall"]</small>
 
         <div>
-            <div id="temp" style="width: 700px;height:400px;float:left"></div>
-            <div id="humi" style="width: 700px;height:400px;float:left"></div>
-            <div id="press" style="width: 700px;height:400px;float:left"></div>
-            <div id="dust" style="width: 700px;height:400px;float:left"></div>
-            <div id="uv" style="width: 700px;height:400px;float:left"></div>
+            <div id="temp" class="weather-chart"></div>
+            <div id="humi" class="weather-chart"></div>
+            <div id="press" class="weather-chart"></div>
+            <div id="dust" class="weather-chart"></div>
+            @*<div id="uv" class="weather-chart"></div>*@
+            <div style="clear:both"></div>
         </div>
     </div>
 </div>
@@ -260,7 +225,7 @@
     };
     dust.setOption(dustOpt);
 
-    var uv = echarts.init(document.getElementById('uv'));
+    @*var uv = echarts.init(document.getElementById('uv'));
     var uvOpt = {
         title: {
             text: '@Localizer["UV"]'
@@ -291,5 +256,5 @@
             data: [@hoursData[0].UV, @hoursData[1].UV, @hoursData[2].UV, @hoursData[3].UV, @hoursData[4].UV, @hoursData[5].UV]
         }]
     };
-    uv.setOption(uvOpt);
+    uv.setOption(uvOpt);*@
 </script>
