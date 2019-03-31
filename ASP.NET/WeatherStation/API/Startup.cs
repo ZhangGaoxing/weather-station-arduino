@@ -27,9 +27,8 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Connection String
-            services.AddDbContext<WeatherContext>(opt =>
-                opt.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Initial Catalog=WeatherStation;User ID=YOUR USER ID;Password=YOUR PASSWORD"));
+            // Add database context
+            services.AddDbContext<WeatherContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

@@ -9,16 +9,19 @@ namespace Utility
 {
     public class WeatherContext : DbContext
     {
-        public WeatherContext(DbContextOptions<WeatherContext> options) : base(options)
-        {
-
-        }
-
         public DbSet<Weather> Weathers { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Connection String
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Initial Catalog=WeatherStation;User ID=YOUR USER ID;Password=YOUR PASSWORD");
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Weather>().ToTable("Weathers");
+
+            modelBuilder.Entity<Weather>().HasData(DatabaseInitializer.Seed());
         }
 
     }

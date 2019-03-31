@@ -41,9 +41,8 @@ namespace WebPage
                 opts.DefaultRequestCulture = new RequestCulture("en");
             });
 
-            // Connection String
-            services.AddDbContext<WeatherContext>(opt =>
-                opt.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Initial Catalog=WeatherStation;User ID=YOUR USER ID;Password=YOUR PASSWORD"));
+            // Add database context
+            services.AddDbContext<WeatherContext>();
 
             services.AddMvc()
                 .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix, options => options.ResourcesPath = "Resources")
