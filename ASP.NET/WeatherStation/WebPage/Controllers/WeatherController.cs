@@ -21,10 +21,10 @@ namespace WebPage.Controllers
             _context = context;
         }
 
-        // GET: /<controller>/
+        [HttpGet]
         public IActionResult Index()
         {
-            // Add Latest Data
+            // Select Latest Data
             ViewData["LatestData"] = _context.Weathers.OrderByDescending(x => x.DateTime)
                 .First();
 
