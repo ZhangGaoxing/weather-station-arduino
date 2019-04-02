@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using SkiaSharp;
 using Utility;
 using Utility.Models;
 using ControllerBase = Microsoft.AspNetCore.Mvc.ControllerBase;
@@ -77,7 +79,7 @@ namespace API.Controllers
             }
         }
 
-        public void GenerateChart()
+        private void GenerateChart()
         {
             var hoursData = _context.Select6HourData();
 
@@ -89,6 +91,11 @@ namespace API.Controllers
                 StringFormat = "MM/dd hh:mm"
             };
 
+            MemoryStream temp = Svg2Png(GetTempModel(dateAxis, hoursData));
+        }
+
+        private PlotModel GetTempModel(DateTimeAxis dateAxis, List<Weather> hoursData)
+        {
             PlotModel tempModel = new PlotModel { Title = "环境温度" };
             tempModel.Axes.Add(
                 new LinearAxis
@@ -114,9 +121,37 @@ namespace API.Controllers
 
             tempModel.Series.Add(tempSeries);
 
-            FileStream fs = System.IO.File.Create("temp.svg");
-            var exporter = new SvgExporter { Width = 600, Height = 400 };
-            exporter.Export(tempModel, fs);
+            return tempModel;
+        }
+
+        private MemoryStream Svg2Png(PlotModel model)
+        {
+            SvgExporter exporter = new SvgExporter { Width = 600, Height = 400 };
+            var svg = new SkiaSharp.Extended.Svg.SKSvg();
+            var imgQuality = 80;
+
+            MemoryStream pngStream = new MemoryStream();
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                exporter.Export(model, ms);
+
+                var pict = svg.Load(ms);
+
+                var dimen = new SkiaSharp.SKSizeI(
+                    (int)Math.Ceiling(pict.CullRect.Width),
+                    (int)Math.Ceiling(pict.CullRect.Height)
+                );
+                var matrix = SKMatrix.MakeScale(1, 1);
+                var img = SKImage.FromPicture(pict, dimen, matrix);
+
+                // convert to PNG
+                var skdata = img.Encode(SKEncodedImageFormat.Png, imgQuality);
+
+                skdata.SaveTo(pngStream);
+            }
+
+            return pngStream;
         }
     }
 }
