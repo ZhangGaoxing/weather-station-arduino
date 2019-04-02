@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using Utility;
 using Utility.Models;
+using ControllerBase = Microsoft.AspNetCore.Mvc.ControllerBase;
 
 namespace API.Controllers
 {
@@ -72,6 +75,48 @@ namespace API.Controllers
             {
                 return "False";
             }
+        }
+
+        public void GenerateChart()
+        {
+            var hoursData = _context.Select6HourData();
+
+            DateTimeAxis dateAxis = new DateTimeAxis
+            {
+                Position = AxisPosition.Bottom,
+                Minimum = DateTimeAxis.ToDouble(hoursData[0].DateTime),
+                Maximum = DateTimeAxis.ToDouble(hoursData[5].DateTime),
+                StringFormat = "MM/dd hh:mm"
+            };
+
+            PlotModel tempModel = new PlotModel { Title = "环境温度" };
+            tempModel.Axes.Add(
+                new LinearAxis
+                {
+                    Title = "温度（℃）",
+                    Position = AxisPosition.Left,
+                    Minimum = hoursData.Min(x => x.Temperature) - 2,
+                    Maximum = hoursData.Max(x => x.Temperature) + 2
+                });
+            tempModel.Axes.Add(dateAxis);
+
+            var tempSeries = new LineSeries
+            {
+                Color = OxyColor.FromRgb(194, 53, 49),
+                MarkerFill = OxyColor.FromRgb(0, 0, 0),
+                MarkerType = MarkerType.Circle
+            };
+
+            foreach (var item in hoursData)
+            {
+                tempSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(item.DateTime), item.Temperature));
+            }
+
+            tempModel.Series.Add(tempSeries);
+
+            FileStream fs = System.IO.File.Create("temp.svg");
+            var exporter = new SvgExporter { Width = 600, Height = 400 };
+            exporter.Export(tempModel, fs);
         }
     }
 }
