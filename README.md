@@ -4,39 +4,40 @@ This project includes an Arduino-based weather station, an ASP.NET Core MVC data
 
 * Arduino Nano
 * Nano Shield
-* AM2320 - Digital Temperature and Humidity Sensor
-* BMP280 - Barometric Pressure and Altitude Sensor
-* ML8511 - UV sensor
+* BME280 - Temperature, Humidity & Pressure Sensor
+* ~~AM2320 - Digital Temperature and Humidity Sensor~~
+* ~~BMP280 - Barometric Pressure and Altitude Sensor~~
+* ~~ML8511 - UV sensor (Abandon)~~
 * GP2Y1010F45 - Optical Dust Sensor
 * DS3231 - RTC
 * ESP8266 - WIFI
 * SD card module
 * 18650 Li-ion and Charger (Optional)
 
-![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/flowchart.png)
+![](Img/flowchart.png)
 
 Most of the referenced libraries come from Adafruit and Aduino Playground, and some I don't know who written it. AM2320 comes from [thakshak](https://github.com/thakshak/AM2320).
 
 ## Components
 ||Name|Count|
 |---|:---|---:|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ArduinoNano.jpg" width="50" />|Arduino Nano|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/NanoShield.jpg" width="50" />|Nano Shield|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/AM2320.jpg" width="50" />|AM2320|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/BMP280.jpg" width="50" />|BMP280|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ML8511.jpg" width="50" />|ML8511|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/GP2Y1010F45.jpg" width="50" />|GP2Y1010F45|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/DS3231.jpg" width="50" />|DS3231|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ESP8266.jpg" width="50" />|ESP8266|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/SD.jpg" width="50" />|SD card module|x1|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/18650.jpg" width="50" />|18650 Li-ion and Charger (Optional)|x1|
+|<img src="Img/ArduinoNano.jpg" width="50" />|Arduino Nano|x1|
+|<img src="Img/NanoShield.jpg" width="50" />|Nano Shield|x1|
+|<img src="Img/AM2320.jpg" width="50" />|AM2320|x1|
+|<img src="Img/BMP280.jpg" width="50" />|BMP280|x1|
+|<img src="Img/ML8511.jpg" width="50" />|ML8511|x1|
+|<img src="Img/GP2Y1010F45.jpg" width="50" />|GP2Y1010F45|x1|
+|<img src="Img/DS3231.jpg" width="50" />|DS3231|x1|
+|<img src="Img/ESP8266.jpg" width="50" />|ESP8266|x1|
+|<img src="Img/SD.jpg" width="50" />|SD card module|x1|
+|<img src="Img/18650.jpg" width="50" />|18650 Li-ion and Charger (Optional)|x1|
 ||Male/Female Jumper Wires|some|
 
 ## Apps
 ||Name|
 |---|---|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ArduinoIDE.jpg" />|Arduino IDE|
-|<img src="https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/VS2017.jpg" />|Microsoft Visual Studio 2017|
+|<img src="Img/ArduinoIDE.jpg" />|Arduino IDE|
+|<img src="Img/VS2017.jpg" />|Microsoft Visual Studio 2017|
 ||Microsoft SQL Server|
 
 ## Arduino Connection
@@ -77,31 +78,31 @@ Most of the referenced libraries come from Adafruit and Aduino Playground, and s
 ## How to Use
 Connect sensors to Arduino.
 
-![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/S1.jpg)
+![](Img/S1.jpg)
 
 ### In ASP.NET Core
 1. Open "**WeatherStation.sln**" and rebuild solution
    
-    ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ASP1.jpg)
+    ![](Img/ASP1.jpg)
 
 
-2. In project **API**, **WebPage**, open **Startup.cs**, change connection string
+2. In project **Utility**, open **WeatherContext.cs**, change connection string
 
-    ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ASP2.jpg)
+    ![](Img/ASP2.jpg)
 
 3. In project **API**, open Controllers - **WeatherController.cs**, change token
 
-    ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ASP3.jpg)
+    ![](Img/ASP3.jpg)
 
 4. Open Tools - NuGet Package Manager - **Package Manager Console**, change **Default project** to **Utility**
    
-    ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ASP41.jpg)
-    ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/ASP42.jpg)
+    ![](Img/ASP41.jpg)
+    ![](Img/ASP42.jpg)
 
     in PMC run this
     ```
-    Add-Migration Initial
-    Update-Database
+    PM> Add-Migration Initial
+    PM> Update-Database
     ```
     or use SSMS run this SQL
     ```SQL
@@ -129,11 +130,11 @@ Connect sensors to Arduino.
 5. In **Line 150**, replace your Token
 6. In **Line 155**, replace your Host
 
-    ![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/Arduino1.jpg)
+    ![](Img/Arduino1.jpg)
 
 7. Upload program to your Arduino
 
 ## Demo Page
 [http://weatherstation.zhangyue.xin/](http://weatherstation.zhangyue.xin)
 
-![](https://raw.githubusercontent.com/ZhangGaoxing/weather-station-arduino/master/Img/demopage.jpg)
+![](Img/demopage.jpg)
