@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OxyPlot;
@@ -49,28 +50,14 @@ namespace API.Controllers
 
             try
             {
-                _context.Weathers.Add(weather);
-                await _context.SaveChangesAsync();
+                //_context.Weathers.Add(weather);
+                //await _context.SaveChangesAsync();
 
-                if (weather.DateTime.Minute == 0 || weather.DateTime.Minute == 30)
-                {
-                    using(HttpClient client=new HttpClient())
-                    {
-                        using(HttpContent content=new StringContent(""))
-                        {
-                            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
-                            HttpResponseMessage response = await client.PostAsync($"https://api.weibo.com/2/statuses/share.json?access_token=2.005MlWeH0GByfS2b6ddd6bb9jLrEeC&status=" +
-                                $"时间：{weather.DateTime.ToString("yyyy/MM/dd HH:mm")}%0a" +
-                                $"温度：{Math.Round(weather.Temperature, 1)} ℃%0a" +
-                                $"相对湿度：{Math.Round(weather.Humidity)} %25%0a" +
-                                $"气压：{Math.Round(weather.Pressure)} Pa%0a" +
-                                $"可吸入颗粒物：{weather.Dust} mg%2fm3%0a" +
-                                $"http://maestrobot.cn", content);
-                        }
-                    }
-                }
-
+                //if (weather.DateTime.Minute == 0 || weather.DateTime.Minute == 30)
+                //{
+                //    await PostWeibo(weather);
+                //}
+                await PostWeibo(weather);
                 return "True";
             }
             catch (Exception)
@@ -79,10 +66,40 @@ namespace API.Controllers
             }
         }
 
-        private void GenerateChart()
+        private async Task PostWeibo(Weather weather)
         {
+            string token = "2.005MlWeH0GByfS2b6ddd6bb9jLrEeC";
+            string status = $"时间：{weather.DateTime.ToString("yyyy/MM/dd HH:mm")}%0a" +
+                    $"温度：{Math.Round(weather.Temperature, 1)} ℃%0a" +
+                    $"相对湿度：{Math.Round(weather.Humidity)} %25%0a" +
+                    $"气压：{Math.Round(weather.Pressure)} Pa%0a" +
+                    $"可吸入颗粒物：{weather.Dust} mg%2fm3%0a" +
+                    $"http://maestrobot.cn";
+
             var hoursData = _context.Select6HourData();
 
+            using (HttpClient client = new HttpClient())
+            {
+                Svg2Png(GetTempModel(hoursData));
+                var pngStream = System.IO.File.OpenRead("img.png");
+
+                MultipartFormDataContent content = new MultipartFormDataContent
+                {
+                    { new StringContent(token, Encoding.UTF8), "access_token" },
+                    { new StringContent(status, Encoding.UTF8), "status" },
+                    { new StreamContent(pngStream, (int)pngStream.Length), "pic", "img.png" }
+                };
+
+                HttpResponseMessage response = await client.PostAsync("https://api.weibo.com/2/statuses/share.json", content);
+                var  s = await content.ReadAsStringAsync();
+                var str = await response.Content.ReadAsStringAsync();
+
+                pngStream.Dispose();
+            }
+        }
+
+        private PlotModel GetTempModel(List<Weather> hoursData)
+        {
             DateTimeAxis dateAxis = new DateTimeAxis
             {
                 Position = AxisPosition.Bottom,
@@ -91,11 +108,6 @@ namespace API.Controllers
                 StringFormat = "MM/dd hh:mm"
             };
 
-            MemoryStream temp = Svg2Png(GetTempModel(dateAxis, hoursData));
-        }
-
-        private PlotModel GetTempModel(DateTimeAxis dateAxis, List<Weather> hoursData)
-        {
             PlotModel tempModel = new PlotModel { Title = "环境温度" };
             tempModel.Axes.Add(
                 new LinearAxis
@@ -106,6 +118,8 @@ namespace API.Controllers
                     Maximum = hoursData.Max(x => x.Temperature) + 2
                 });
             tempModel.Axes.Add(dateAxis);
+
+            tempModel.Background = OxyColor.FromRgb(255, 255, 255);
 
             var tempSeries = new LineSeries
             {
@@ -124,21 +138,112 @@ namespace API.Controllers
             return tempModel;
         }
 
-        private MemoryStream Svg2Png(PlotModel model)
+        private PlotModel GetHumiModel(DateTimeAxis dateAxis, List<Weather> hoursData)
+        {
+            PlotModel model = new PlotModel { Title = "相对湿度" };
+            model.Axes.Add(
+                new LinearAxis
+                {
+                    Title = "湿度（%）",
+                    Position = AxisPosition.Left,
+                    Minimum = hoursData.Min(x => x.Humidity) - 2,
+                    Maximum = hoursData.Max(x => x.Humidity) + 2
+                });
+            model.Axes.Add(dateAxis);
+
+            var series = new LineSeries
+            {
+                Color = OxyColor.FromRgb(47, 69, 84),
+                MarkerFill = OxyColor.FromRgb(0, 0, 0),
+                MarkerType = MarkerType.Circle
+            };
+
+            foreach (var item in hoursData)
+            {
+                series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(item.DateTime), item.Humidity));
+            }
+
+            model.Series.Add(series);
+
+            return model;
+        }
+
+        private PlotModel GetPressModel(DateTimeAxis dateAxis, List<Weather> hoursData)
+        {
+            PlotModel model = new PlotModel { Title = "气压" };
+            model.Axes.Add(
+                new LinearAxis
+                {
+                    Title = "气压（Pa）",
+                    Position = AxisPosition.Left,
+                    Minimum = hoursData.Min(x => x.Pressure) - 50,
+                    Maximum = hoursData.Max(x => x.Pressure) + 50
+                });
+            model.Axes.Add(dateAxis);
+
+            var series = new LineSeries
+            {
+                Color = OxyColor.FromRgb(97, 160, 168),
+                MarkerFill = OxyColor.FromRgb(0, 0, 0),
+                MarkerType = MarkerType.Circle
+            };
+
+            foreach (var item in hoursData)
+            {
+                series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(item.DateTime), item.Pressure));
+            }
+
+            model.Series.Add(series);
+
+            return model;
+        }
+
+        private PlotModel GetDustModel(DateTimeAxis dateAxis, List<Weather> hoursData)
+        {
+            PlotModel model = new PlotModel { Title = "可吸入颗粒物" };
+            model.Axes.Add(
+                new LinearAxis
+                {
+                    Title = "可吸入颗粒物（mg/m³）",
+                    Position = AxisPosition.Left,
+                    Minimum = hoursData.Min(x => x.Dust) - 0.02,
+                    Maximum = hoursData.Max(x => x.Dust) + 0.02
+                });
+            model.Axes.Add(dateAxis);
+
+            var series = new LineSeries
+            {
+                Color = OxyColor.FromRgb(212, 130, 101),
+                MarkerFill = OxyColor.FromRgb(0, 0, 0),
+                MarkerType = MarkerType.Circle
+            };
+
+            foreach (var item in hoursData)
+            {
+                series.Points.Add(new DataPoint(DateTimeAxis.ToDouble(item.DateTime), item.Dust));
+            }
+
+            model.Series.Add(series);
+
+            return model;
+        }
+
+        private void Svg2Png(PlotModel model)
         {
             SvgExporter exporter = new SvgExporter { Width = 600, Height = 400 };
             var svg = new SkiaSharp.Extended.Svg.SKSvg();
             var imgQuality = 80;
 
-            MemoryStream pngStream = new MemoryStream();
-
-            using (MemoryStream ms = new MemoryStream())
+            using (FileStream fs = System.IO.File.Create("temp.svg"))
             {
-                exporter.Export(model, ms);
+                exporter.Export(model, fs);
+            }
 
-                var pict = svg.Load(ms);
+            using (FileStream png = System.IO.File.Create("img.png"))
+            {
+                var pict = svg.Load("temp.svg");
 
-                var dimen = new SkiaSharp.SKSizeI(
+                var dimen = new SKSizeI(
                     (int)Math.Ceiling(pict.CullRect.Width),
                     (int)Math.Ceiling(pict.CullRect.Height)
                 );
@@ -148,10 +253,8 @@ namespace API.Controllers
                 // convert to PNG
                 var skdata = img.Encode(SKEncodedImageFormat.Png, imgQuality);
 
-                skdata.SaveTo(pngStream);
+                skdata.SaveTo(png);
             }
-
-            return pngStream;
         }
     }
 }
