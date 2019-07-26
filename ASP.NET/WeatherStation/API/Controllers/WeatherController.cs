@@ -78,26 +78,36 @@ namespace API.Controllers
                     $"可吸入颗粒物：{weather.Dust} mg%2fm3%0a" +
                     $"http://maestrobot.cn";
 
-            var hoursData = _context.Select6HourData();
-
             using (HttpClient client = new HttpClient())
             {
-                Svg2Png(GetTempModel(hoursData));
-                var pngStream = System.IO.File.OpenRead("img.png");
-
-                MultipartFormDataContent content = new MultipartFormDataContent
+                using (HttpContent content = new StringContent(""))
                 {
-                    { new StringContent(token, Encoding.UTF8), "access_token" },
-                    { new StringContent(status, Encoding.UTF8), "status" },
-                    { new StreamContent(pngStream, (int)pngStream.Length), "pic", "img.png" }
-                };
+                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-                HttpResponseMessage response = await client.PostAsync("https://api.weibo.com/2/statuses/share.json", content);
-                var  s = await content.ReadAsStringAsync();
-                var str = await response.Content.ReadAsStringAsync();
-
-                pngStream.Dispose();
+                    HttpResponseMessage response = await client.PostAsync($"https://api.weibo.com/2/statuses/share.json?access_token={token}&status={status}", content);
+                }
             }
+
+            //var hoursData = _context.Select6HourData();
+
+            //using (HttpClient client = new HttpClient())
+            //{
+            //    Svg2Png(GetTempModel(hoursData));
+            //    var pngStream = System.IO.File.OpenRead("img.png");
+
+            //    MultipartFormDataContent content = new MultipartFormDataContent
+            //    {
+            //        { new StringContent(token, Encoding.UTF8), "access_token" },
+            //        { new StringContent(status, Encoding.UTF8), "status" },
+            //        { new StreamContent(pngStream, (int)pngStream.Length), "pic", "img.png" }
+            //    };
+
+            //    HttpResponseMessage response = await client.PostAsync("https://api.weibo.com/2/statuses/share.json", content);
+            //    var  s = await content.ReadAsStringAsync();
+            //    var str = await response.Content.ReadAsStringAsync();
+
+            //    pngStream.Dispose();
+            //}
         }
 
         private PlotModel GetTempModel(List<Weather> hoursData)
