@@ -11,18 +11,25 @@ namespace Utility.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        [Column("weather_id")]
+        public long WeatherID { get; set; }
 
+        [Column("date_time")]
         public DateTime DateTime { get; set; }
 
+        [Column("temperature")]
         public double Temperature { get; set; }
 
+        [Column("humidity")]
         public double Humidity { get; set; }
 
+        [Column("pressure")]
         public double Pressure { get; set; }
 
+        [Column("dust")]
         public double Dust { get; set; }
 
+        [Column("uv")]
         public double UV { get; set; }
     }
 }

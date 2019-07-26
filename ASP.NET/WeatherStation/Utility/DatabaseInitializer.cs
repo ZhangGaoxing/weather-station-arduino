@@ -14,7 +14,7 @@ namespace Utility
                 {
                     new Weather
                     {
-                        ID=1,
+                        WeatherID=1,
                         DateTime=new DateTime(2019,1,1,21,0,0),
                         Temperature=-0.9,
                         Humidity=25.8,
@@ -24,7 +24,7 @@ namespace Utility
                     },
                     new Weather
                     {
-                        ID=2,
+                        WeatherID=2,
                         DateTime=new DateTime(2019,1,1,22,0,0),
                         Temperature=-1.5,
                         Humidity=28.8,
@@ -34,7 +34,7 @@ namespace Utility
                     },
                     new Weather
                     {
-                        ID=3,
+                        WeatherID=3,
                         DateTime=new DateTime(2019,1,1,23,0,0),
                         Temperature=-2.2,
                         Humidity=29.6,
@@ -44,7 +44,7 @@ namespace Utility
                     },
                     new Weather
                     {
-                        ID=4,
+                        WeatherID=4,
                         DateTime=new DateTime(2019,1,2,0,0,0),
                         Temperature=-2.9,
                         Humidity=31.8,
@@ -54,7 +54,7 @@ namespace Utility
                     },
                     new Weather
                     {
-                        ID=5,
+                        WeatherID=5,
                         DateTime=new DateTime(2019,1,2,1,0,0),
                         Temperature=-3.6,
                         Humidity=33.8,
@@ -64,7 +64,7 @@ namespace Utility
                     },
                     new Weather
                     {
-                        ID=6,
+                        WeatherID=6,
                         DateTime=new DateTime(2019,1,2,2,0,0),
                         Temperature=-3.5,
                         Humidity=32.8,
@@ -74,7 +74,7 @@ namespace Utility
                     },
                     new Weather
                     {
-                        ID=7,
+                        WeatherID=7,
                         DateTime=new DateTime(2019,1,2,3,0,0),
                         Temperature=-3.1,
                         Humidity=31.2,
@@ -84,7 +84,7 @@ namespace Utility
                     },
                     new Weather
                     {
-                        ID=8,
+                        WeatherID=8,
                         DateTime=new DateTime(2019,1,2,4,0,0),
                         Temperature=-2.7,
                         Humidity=29.2,

@@ -14,12 +14,13 @@ namespace Utility
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Connection String
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Initial Catalog=WeatherStation;User ID=YOUR USER ID;Password=YOUR PASSWORD"); 
+            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=WeatherStation;User Id=postgres;Password=YOUR PASSWORD;");
+                //.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Initial Catalog=WeatherStation;User ID=YOUR USER ID;Password=YOUR PASSWORD"); 
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Weather>().ToTable("Weathers");
+            modelBuilder.Entity<Weather>().ToTable("weather");
 
             modelBuilder.Entity<Weather>().HasData(DatabaseInitializer.Seed());
         }

@@ -32,7 +32,7 @@ namespace API.Controllers
         {
             try
             {
-                return _context.Weathers.Where(x => x.ID == id).First();
+                return _context.Weathers.Where(x => x.WeatherID == id).First();
             }
             catch (Exception)
             {
@@ -47,17 +47,19 @@ namespace API.Controllers
             {
                 return "Token error.";
             }
-
+            
             try
             {
-                //_context.Weathers.Add(weather);
-                //await _context.SaveChangesAsync();
+                weather.DateTime = DateTime.Now;
 
-                //if (weather.DateTime.Minute == 0 || weather.DateTime.Minute == 30)
-                //{
-                //    await PostWeibo(weather);
-                //}
-                await PostWeibo(weather);
+                _context.Weathers.Add(weather);
+                await _context.SaveChangesAsync();
+
+                if (weather.DateTime.Minute == 0 || weather.DateTime.Minute == 30)
+                {
+                    await PostWeibo(weather);
+                }
+
                 return "True";
             }
             catch (Exception)
