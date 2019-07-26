@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Utility;
-using Utility.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,58 +15,15 @@ namespace WebPage.Controllers
             _context = context;
         }
 
-        // GET: /<controller>/
+        [HttpGet]
         public IActionResult Index()
         {
-            // Add Latest Data
+            // Select Latest Data
             ViewData["LatestData"] = _context.Weathers.OrderByDescending(x => x.DateTime)
                 .First();
 
-            #region Select 6 Hour Data
-            List<Weather> hoursData = new List<Weather>();
-
-            var groups = _context.Weathers.GroupBy(x => x.DateTime.Date)
-                .OrderByDescending(x => x.Key)
-                .Take(2)
-                .Select(g => g.Select(x => x).ToList()).ToList();
-
-            var today = groups[0].GroupBy(x => x.DateTime.Hour)
-                .OrderByDescending(x => x.Key)
-                .Select(g => g.Select(x => x).ToList()).ToList();
-
-            int count = today.Count;
-            if (count >= 6)
-            {
-                var temp = today.Take(6);
-
-                foreach (var item in temp)
-                {
-                    hoursData.Add(item[0]);
-                }
-            }
-            else
-            {
-                var yesterday = groups[1].GroupBy(x => x.DateTime.Hour)
-                    .OrderByDescending(x => x.Key)
-                    .Select(g => g.Select(x => x).ToList()).ToList();
-
-                var temp = yesterday.Take(6 - count);
-
-                foreach (var item in today)
-                {
-                    hoursData.Add(item[0]);
-                }
-
-                foreach (var item in temp)
-                {
-                    hoursData.Add(item[0]);
-                }
-            }
-
-            hoursData.Reverse();
-
-            ViewData["HoursData"] = hoursData;
-            #endregion
+            // Select 6 Hour Data
+            ViewData["HoursData"] = _context.Select6HourData();
 
             return View();
         }
