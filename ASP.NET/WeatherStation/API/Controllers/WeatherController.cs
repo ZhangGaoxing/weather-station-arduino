@@ -54,13 +54,10 @@ namespace API.Controllers
                 weather.DateTime = DateTime.Now;
                 weather.WeatherName = await GetXinzhiWeather();
 
+                await PostWeibo(weather);
+
                 _context.Weathers.Add(weather);
                 await _context.SaveChangesAsync();
-
-                if (weather.DateTime.Minute == 0 || weather.DateTime.Minute == 30)
-                {
-                    await PostWeibo(weather);
-                }
 
                 return "True";
             }
@@ -87,9 +84,8 @@ namespace API.Controllers
         private async Task PostWeibo(Weather weather)
         {
             string token = "";  // weibo token
-            string status = $"时间：{weather.DateTime.ToString("yyyy/MM/dd HH:mm")} {weather.WeatherName}%0a" +
-                    $"温度：{Math.Round(weather.Temperature, 1)} ℃%0a" +
-                    $"相对湿度：{Math.Round(weather.Humidity)} %25%0a" +
+            string status = $"{weather.DateTime.ToString("yyyy/MM/dd HH:mm")}    {weather.WeatherName}%0a" +
+                    $"温度：{Math.Round(weather.Temperature, 1)} ℃    相对湿度：{Math.Round(weather.Humidity)} %25%0a" +
                     $"气压：{Math.Round(weather.Pressure)} Pa%0a" +
                     $"可吸入颗粒物：{weather.Dust} mg%2fm3%0a" +
                     $"http://maestrobot.cn";
