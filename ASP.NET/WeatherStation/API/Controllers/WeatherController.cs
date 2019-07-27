@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -51,6 +52,7 @@ namespace API.Controllers
             try
             {
                 weather.DateTime = DateTime.Now;
+                weather.WeatherName = await GetXinzhiWeather();
 
                 _context.Weathers.Add(weather);
                 await _context.SaveChangesAsync();
@@ -68,10 +70,24 @@ namespace API.Controllers
             }
         }
 
+        private async Task<string> GetXinzhiWeather()
+        {
+            string key = "";  // xinzhi key
+            string location = "";  // like 35.66:123.55
+
+            using (HttpClient client=new HttpClient())
+            {
+                var response = await client.GetAsync($"https://api.seniverse.com/v3/weather/now.json?key={key}&location={location}&language=zh-Hans&unit=c");
+                string json = await response.Content.ReadAsStringAsync();
+
+                return (string)JsonConvert.DeserializeObject<dynamic>(json).results[0].now.text;
+            }
+        }
+
         private async Task PostWeibo(Weather weather)
         {
-            string token = "2.005MlWeH0GByfS2b6ddd6bb9jLrEeC";
-            string status = $"时间：{weather.DateTime.ToString("yyyy/MM/dd HH:mm")}%0a" +
+            string token = "";  // weibo token
+            string status = $"时间：{weather.DateTime.ToString("yyyy/MM/dd HH:mm")} {weather.WeatherName}%0a" +
                     $"温度：{Math.Round(weather.Temperature, 1)} ℃%0a" +
                     $"相对湿度：{Math.Round(weather.Humidity)} %25%0a" +
                     $"气压：{Math.Round(weather.Pressure)} Pa%0a" +

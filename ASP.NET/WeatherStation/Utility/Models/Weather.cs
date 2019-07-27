@@ -17,6 +17,9 @@ namespace Utility.Models
         [Column("date_time")]
         public DateTime DateTime { get; set; }
 
+        [Column("weather_name")]
+        public string WeatherName { get; set; }
+
         [Column("temperature")]
         public double Temperature { get; set; }
 
