@@ -67,6 +67,32 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Calculate Heat Index
+        /// </summary>
+        /// <param name="temp">Temperature in celsius</param>
+        /// <param name="rh">Humidity in percent, like 56(56%)</param>
+        /// <returns>Temperature in celsius</returns>
+        private double CalHeatIndex(double temp, double rh)
+        {
+            double t = temp * 1.8 + 32;
+            double hi;
+
+            hi = -42.379 + 2.04901523 * t + 10.14333127 * rh - .22475541 * t * rh
+             -.00683783 * t * t - .05481717 * rh * rh + .00122874 * t * t * rh
+             +.00085282 * t * rh * rh - .00000199 * t * t * rh * rh;
+
+            if (hi < 80)
+                hi = 0.5 * t + 61.0 + (t - 68.0) * 1.2 + rh * 0.094;
+            else
+                if (rh < 13 && (t > 80 || t < 112))
+                    hi -= (13 - rh) / 4.0 * Math.Sqrt((17 - Math.Abs(t - 95)) / 17.0);
+                else if (rh > 85 && (t > 80 || t < 87))
+                    hi += (rh - 85) * (87 - t) / 50.0;
+
+            return (hi - 32) / 1.8;
+        }
+
         private async Task<string> GetXinzhiWeather()
         {
             string key = "";  // xinzhi key
@@ -85,9 +111,10 @@ namespace API.Controllers
         {
             string token = "";  // weibo token
             string status = $"{weather.DateTime.ToString("yyyy/MM/dd HH:mm")}    {weather.WeatherName}%0a" +
-                    $"温度：{Math.Round(weather.Temperature, 1)} ℃    相对湿度：{Math.Round(weather.Humidity)} %25%0a" +
-                    $"气压：{Math.Round(weather.Pressure)} Pa%0a" +
-                    $"可吸入颗粒物：{weather.Dust} mg%2fm3%0a" +
+                    $"温度：{Math.Round(weather.Temperature, 1)} ℃    体感温度：{Math.Round(CalHeatIndex(weather.Temperature, weather.Humidity), 1)} ℃%0a" +
+                    $"相对湿度：{Math.Round(weather.Humidity)} %25%0a" +
+                    $"气压：{Math.Round(weather.Pressure / 100, 2)} hPa%0a" +
+                    //$"可吸入颗粒物：{weather.Dust} mg%2fm3%0a" +
                     $"http://maestrobot.cn";
 
             using (HttpClient client = new HttpClient())
