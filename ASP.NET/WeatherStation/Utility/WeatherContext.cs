@@ -29,7 +29,8 @@ namespace Utility
         {
             List<Weather> hoursData = new List<Weather>();
 
-            var groups = Weathers.GroupBy(x => x.DateTime.Date)
+            var groups = Weathers.ToList()
+                .GroupBy(x => x.DateTime.Date)
                 .OrderByDescending(x => x.Key)
                 .Take(2)
                 .Select(g => g.Select(x => x).ToList()).ToList();

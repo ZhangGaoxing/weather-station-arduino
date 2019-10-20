@@ -104,20 +104,23 @@ Connect sensors to Arduino.
     PM> Add-Migration Initial
     PM> Update-Database
     ```
-    or use SSMS run this SQL
+    or run this SQL (PostgreSQL script)
     ```SQL
-    CREATE DATABASE WeatherStation
+    create database "WeatherStation";
 
-    CREATE TABLE [dbo].[Weathers] (
-        [ID]          INT           IDENTITY (1, 1) NOT NULL,
-        [DateTime]    DATETIME2 (7) NOT NULL,
-        [Temperature] FLOAT (53)    NOT NULL,
-        [Humidity]    FLOAT (53)    NOT NULL,
-        [Pressure]    FLOAT (53)    NOT NULL,
-        [Dust]        FLOAT (53)    NOT NULL,
-        [UV]          FLOAT (53)    NOT NULL,
-        CONSTRAINT [PK_Weathers] PRIMARY KEY CLUSTERED ([ID] ASC)
+    create table weather (
+        weather_id           SERIAL not null,
+        date_time            TIMESTAMP            null,
+        weather_name         VARCHAR(10)          null,
+        temperature          NUMERIC(4,2)         null,
+        humidity             NUMERIC(4,2)         null,
+        pressure             NUMERIC(10,2)        null,
+        dust                 NUMERIC(4)           null,
+        uv                   DECIMAL(4,2)         null,
+        constraint PK_WEATHER primary key (weather_id)
     );
+
+    insert into "public"."weather" ("weather_id","date_time","weather_name","temperature","humidity","pressure","dust","uv") VALUES (1, '2019-01-01 21:00:00', NULL, -0.90, 25.80, 103662.72, 0, 0.01),(2, '2019-01-01 22:00:00', NULL, -1.50, 28.80, 103729.69, 0, 0.01),(3, '2019-01-01 23:00:00', NULL, -2.20, 29.60, 103632.05, 0, 0.01),(4, '2019-01-02 00:00:00', NULL, -2.90, 31.80, 103884.52, 0, 0.01),(5, '2019-01-02 01:00:00', NULL, -3.60, 33.80, 103603.38, 0, 0.01),(6, '2019-01-02 02:00:00', NULL, -3.50, 32.80, 103704.99, 0, 0.01),(7, '2019-01-02 03:00:00', NULL, -3.10, 31.20, 103872.41, 0, 0.01),(8, '2019-01-02 04:00:00', NULL, -2.70, 29.20, 103882.69, 0, 0.01);
     ```
 
 5. Publish **API**, **WebPage** to your server
